@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Chapter 12
+    </title>
+    <script type="text/javascript" src="d3.js"></script>
+  <body>
+    <script type="text/javascript">
+		
+        var dataset = [ 5, 10, 15, 20, 25 ];
+        
+        var allParas = d3.select("body").selectAll("p") //inlcudes refrence to all five paragrpahs 
+            .data(dataset)
+            .enter()
+            .append("p")
+            .text(function(d) {
+                return "I can count up to " + d;
+            });
+
+        var redParas = allParas.filter(function(d) {  //only incldues reference to only the last two 
+                return d > 15;  //we apply the filter to that selcetion > 15 
+            })
+            .style("color", "red");
+        
+    </script>
+  </body>
+</html>
+s

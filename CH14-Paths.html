@@ -1,0 +1,54 @@
+!<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>D3: Loading GeoJSON data and generating SVG paths</title>
+    <script type="text/javascript" src="../d3.js"></script>
+    <style type="text/css"></style></head
+  >ss
+  <body>
+    <script type="text/javascript">
+      //Width and height
+      var w = 500;
+      var h = 300;
+
+      //Define map Projection
+      var projection = d3
+        .geoAlbersUsa()
+        .translate([w / 2, h / 2]) //it transalates the projection to the center of the iamge(half width and half its height)
+        .scale([500]); //Scale the size of the projection down
+
+      //Create path generator to draw the
+      var path = d3.geoPath(projection);
+
+      //Define path generator, using the Albers USA projection
+      //the d3.geoPath it transalte geographic coordinates to SVG paths
+      //Paths can be used with projections and transfroms
+      //we difine our projection to use: d3.geoAlber....
+      //var path = d3.geoPath().projection(d3.geoAlbersUsa());
+
+      //Create SVG element
+      var svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+      //Load in GeoJSON data
+      //d3.json takes two arguments
+      //it takes a string pointi to your JSON file as its first argument
+      //and a callback function that will run  once the JSON has been loaded
+      //its asynchronous allows D3 to draw while the data is  loading
+      d3.json("us-states.json", function (json) {
+        //Bind data and create one path per GeoJSON feature
+        svg
+          .selectAll("path")
+          .data(json.features)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          .style("fill", "green");
+      });
+    </script>
+  </body>
+</html>

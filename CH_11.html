@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <head>
+      <meta charset="utf-8" />
+      <link rel="icon" href="#" />
+      <title>D3 Page Template</title>
+      <script type="text/javascript" src="d3.js"></script>
+    </head>
+    <style></style>
+  </head>
+  <body>
+    <script>
+        var rowConverter = function (d) {
+          return {
+            //Make a new Data object for each year+Month
+            date: new Date(+d.year, +d.month - 1), // + operatir forces the values to be tyoe as numbers instead of strings
+            //Convert from string to float
+            average: parseFloat(d.average),
+          };
+        };
+        //LOAD DATA
+        d3.csv(
+          "mauna_loa_co2_monthly_averages.csv",
+          rowConverter,
+          function (data) {
+            var dataset = data;
+
+            //Print data to console as table, for verification
+            console.table(dataset, ["date", "average"]);
+          }
+        );
+
+        //SCALE SETUP
+        xScale = d3
+          .scaleTime()
+          .domain([
+            d3.min(dataset, function (d) {
+              return d.date;
+            }),
+            d3.max(dataset, function (d) {
+              return d.date;
+            }),
+          ])
+          .range([0, w]);
+        yScale = d3;
+        d3.scaleLinear()
+          .domain([
+            0,
+            d3.max(dataset, function (d) {
+              return d.average;
+            }),
+          ])
+          .range([h, 0]);
+
+        //DEFINE A LINE GENERATOR FUNTION
+        line = d3 //This is what we use to draw lines
+          .line()
+          .x(function (d) {
+            return xScale(d.date); /
+          })
+          .y(function (d) {
+            return yScale(d.average);
+          });
+          // Note: the x&y accerssors tell the line generator how to decide where to place each dot on the line
+        //Create SVG Element
+        var svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", w)
+          .attr("height", h);
+
+      //Create line
+    </script>
+  </body>
+</html>

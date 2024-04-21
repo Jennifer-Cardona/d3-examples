@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>D3: Pie layout pie chart</title>
+    <script type="text/javascript" src="../d3.js"></script>
+    <style type="text/css">
+      text {
+        font-family: sans-serif;
+        font-size: 12px;
+        fill: white;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      //Width and height
+      var w = 300;
+      var h = 300;
+
+      var dataset = [5, 10, 20, 45, 6, 25];
+      //Note for last: if we make the innerRadies > 0  then it will look like a donut chart instead
+      var outerRadius = w / 2; //outer radius of pie (distance from center to edge)
+      var innerRadius = 3; // inner radius of pie (how close to the center
+      var arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+
+      //Define pie layout
+      var pie = d3.pie();
+
+      //Easy colors accessible via a 10-step ordinal scale
+      //d3.schemeCategory10: is an array of 10 different colors
+      var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      //1.First we create the SVG element
+      var svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+      //2.Then we create new groups for each incoming wedge
+      var arcs = svg
+        .selectAll("g.arc")
+        .data(pie(dataset)) //binding the pie data to new elemtns
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr(
+          "transform",
+          "translate(" + outerRadius + "," + outerRadius + ")" //translationg the paths to the center
+        );
+
+      //Draw arc paths
+      arcs
+        .append("path") //within each g we append a path
+        .attr("fill", function (d, i) {
+          //Path description
+          return color(i);
+        })
+        .attr("d", arc); //here we are passing the arc fucntion itselt as a parameter
+      //Note: D3 automatically passses in the datum and index values when when a named funcitons is specified as a parameter
+
+      //2. We create Labels to each wedges
+      arcs
+        .append("text")
+        .attr("transform", function (d) {
+          return "translate(" + arc.centroid(d) + ")"; //arc.centroid is a funtions that calculates and returns the point of any arc
+        })
+        //we transalate each label element to each arc's centroid
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.value; //here we refrence the array of objects instead of our original array becaseu we bound the data to the pie
+        });
+    </script>
+  </body>
+</html>

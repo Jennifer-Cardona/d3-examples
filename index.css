@@ -8,3 +8,7 @@ div.bar {
     height: 75px; /* We'll override height later */
     background-color: teal;
     }
+
+    rect: :hover {
+        fill: brown;
+      }

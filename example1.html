@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    var rowConverter = function (d) {
+      return {
+        date: new Date(+d.year, +d.month - 1),
+        average: parseFloat(d.average), //Convert from string to float
+      };
+    };
+    d3.csv("mauna_loa_co2_monthly_averages.csv", rowConverter, function (data) {
+      var dataset = data;
+      console.table(dataset, ["date", "average"]);
+    });
+  </script>
+</html>
